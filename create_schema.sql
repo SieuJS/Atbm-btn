@@ -1,5 +1,7 @@
 -- CO SO DU LIEU QUAN LY HOC TAP
-conn qlhs/123456; 
+conn qlhs/123456;
+alter session set "_oracle_script" = true;  
+set current_schema = qlhs ; 
 
 -- Xoa cac bang
 BEGIN
@@ -58,6 +60,11 @@ CREATE TABLE PREREQUISITE
     Prerequisite_number VARCHAR2(10)
 );
 
+CREATE TABLE COURSE_REGIS_TIMELINE
+(
+    START_TIME DATETIME,
+    END_TIME DATETIME
+)
 
 -- Rang buoc khoa ngoai
 -- SECTION
@@ -119,6 +126,8 @@ INSERT ALL
     INTO PREREQUISITE VALUES ('CS3380', 'MATH2410')
     INTO PREREQUISITE VALUES ('CS3320', 'CS1310')
 SELECT * FROM DUAL;
+
+INSERT INTO COURSE_REGIS_TIMELINE VALUES (TO_DATE('2024/01/02', 'YYYY/MM/DD'))
 
 -- Kiem tra du lieu
 SELECT * FROM STUDENT;

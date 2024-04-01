@@ -3,20 +3,42 @@ alter session set current_schema = QLHS;
 alter session set  "_oracle_script" = true; 
 set pause off; 
 
-drop view vw_student_infor_17 ;
-drop view  vw_student_info_8 ;
-drop view vw_student_section_infor  ;
+-- SET VIEW FOR STUDENT ; 
 
--- xem thong tin ban than
+-- XEM BANG SECION TRU TRUONG INSTRUCTOR ; 
 
-create  view vw_student_infor_17 
-as select * from qlhs.Student where Student_number = '17';
+CREATE OR REPLACE VIEW VW_STUDENT_ON_SECTION 
+AS
+SELECT SECTION_IDENTIFIER , COURSE_NUMBER , SEMESTER , YEAR FROM SECTION ; 
+/
 
-create view vw_student_info_8 
-as select * from qlhs.Student where Student_number = '8';
+-- XEM BANG COURSE, PREREQUISITE 
 
--- xem thong tin section 
+CREATE OR REPLACE VIEW VW_STUDENT_ON_COURSE 
+AS 
+SELECT * FROM COURSE ; 
+/
 
-create view vw_student_section_infor 
-as select Section_identifier , Course_number , Semester, Year from Section ;
+CREATE OR REPLACE VIEW VW_STUDENT_ON_PREREQUISITE 
+AS 
+SELECT * FROM PREREQUISITE ; 
+/
 
+--XEM THONG TIN LIEN QUAN DEN BAN THAN TREN BANG STUDENT ; 
+
+CREATE OR REPLACE VIEW VW_STUDENT_ON_STUDENT 
+AS 
+SELECT * FROM STUDENT WHERE 
+'RL_QLHS_STUDENT_' || STUDENT_NUMBER = SYS_CONTEXT('USERENV' , 'SESSION_USER');
+/
+
+-- XEM DONG DU LIEU LIEN QUAN TOI BAN THAN GRADE_REPORT ; 
+CREATE OR REPLACE VIEW VW_STUDENT_ON_GRADE_REPORT 
+AS 
+SELECT * FROM GRADE_REPORT WHERE 
+'RL_QLHS_STUDENT_' || STUDENT_NUMBER = SYS_CONTEXT('USERENV' , 'SESSION_USER');
+
+-- THEM THONG TIN TREN GRADE_REPORT 
+CREATE OR REPLACE TRIGGER TRG_STUDENT_INSERT_ON_GRADE_REPORT
+AS 
+SELECT * FROM GRADE_REPORT WHERE 
